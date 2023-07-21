@@ -25,7 +25,6 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  
 }
 
 .svg-label {
@@ -34,7 +33,6 @@ body {
   font-size: 24px;
   font-weight: 500;
 }
-
 
 .sub-svg-label {
   font-size: 18px;
@@ -89,7 +87,9 @@ body {
       rgba(16, 24, 40, 0.03),
     0px 26.31578826904297px 31.578947067260742px -5.263157844543457px rgba(16, 24, 40, 0.08);
 }
-
+svg {
+  border-radius: 8px;
+}
 .heading {
   line-height: 1.2;
   margin: 0;
