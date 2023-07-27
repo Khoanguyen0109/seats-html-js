@@ -17705,6 +17705,16 @@
             <div class="grid-container">
               <div class="grid-item">
                 <div class="form-control">
+                  <label>Tên kịch</label>
+                  <!-- <input type="text" id="play" placeholder="Tên kịch" /> -->
+                  <select id="play" onchange="onChangePlay(this)">
+                    <option value="" disabled selected>Chọn xuất chiếu</option>
+                  </select>
+                  <small>Error message</small>
+                </div>
+              </div>
+              <div class="grid-item">
+                <div class="form-control">
                   <label>Họ và Tên</label>
                   <input type="text" id="name" placeholder="Họ và Tên *" />
                   <small>Error message</small>
