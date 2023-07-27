@@ -4,6 +4,8 @@ const bookedSeat = [];
 let seats = [];
 let showTimes = [];
 let total = 0;
+let voucher = 0;
+
 const API_ENDPOINT = "https://heroku.goappscript.com/booking";
 async function getBookedSeats(id_xuat_chieu) {
   try {
@@ -22,6 +24,21 @@ async function getSeats() {
     seats = res.data;
   } catch (error) {
     console.log("error", error);
+  }
+}
+
+async function getVoucher(body) {
+  try {
+    const res = await fetch(`${API_ENDPOINT}/check-voucher`, {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => response.json());
+    return res;
+  } catch (error) {
+    return error;
   }
 }
 
@@ -151,6 +168,22 @@ function getFieldName(input) {
   return input.id.charAt(0).toUpperCase() + input.id.slice(1);
 }
 
+function calculate() {
+  total = 0;
+  bookedSeat.forEach((seat) => {
+    const item = seats.find((item) => item.ma_ghe === seat);
+    total += parseFloat(item.gia_ve.replaceAll(",", ""));
+  });
+  const preTotal = total - voucher;
+  if (preTotal >= 0) {
+    total = preTotal;
+  } else {
+    total = 0;
+  }
+  const totalBox = document.getElementById("total");
+  totalBox.innerHTML = new Intl.NumberFormat().format(total);
+}
+
 const onFill = (seat) => {
   const gBox = document.getElementById(seat);
   if (gBox) {
@@ -158,11 +191,9 @@ const onFill = (seat) => {
     const color = ACTIVE_SEAT;
     box.setAttribute("fill", color);
     const item = seats.find((item) => item.ma_ghe === seat);
-    console.log("item", item);
-    total += parseFloat(item.gia_ve.replaceAll(",", ""));
-    const totalBox = document.getElementById("total");
-    console.log("totalBox", totalBox);
-    totalBox.innerHTML = new Intl.NumberFormat().format(total);
+    if (item) {
+      calculate();
+    }
   }
 };
 
@@ -188,10 +219,9 @@ const onUnFill = (seat) => {
     const box = gBox.childNodes[1];
     box.setAttribute("fill", color);
     const item = seats.find((item) => item.ma_ghe === seat);
-    total -= parseFloat(item.gia_ve.replaceAll(",", ""));
-    const totalBox = document.getElementById("total");
-    console.log("totalBox", totalBox);
-    totalBox.innerHTML = new Intl.NumberFormat().format(total);
+    if (item) {
+      calculate();
+    }
   }
 };
 
@@ -259,15 +289,15 @@ function showBox(e) {
     !seatId.includes("frame")
   ) {
     if (bookedSeat.includes(seatId)) {
-      onUnFill(seatId);
       const index = bookedSeat.indexOf(seatId);
       if (index > -1) {
         // only splice array when item is found
         bookedSeat.splice(index, 1); // 2nd parameter means remove one item only
       }
+      onUnFill(seatId);
     } else {
-      onFill(seatId);
       bookedSeat.push(seatId);
+      onFill(seatId);
     }
   }
   const seatBox = document.getElementById("seats");
@@ -403,6 +433,29 @@ function go() {
 function goError() {
   $(".message-error").toggleClass("comein");
   $(".check-error").toggleClass("scaledown");
+}
+
+async function onFindVoucher(selectObject) {
+  var value = selectObject;
+  let field_value = document.getElementById("voucher");
+
+  const res = await getVoucher({ voucher: value });
+  if (value === "") {
+    const formControl = field_value.parentElement;
+    formControl.className = "form-control";
+    const small = formControl.querySelector("small");
+    small.innerText = "";
+    return;
+  }
+  if (res.status === 200 && res.discount) {
+    const discount = parseFloat(res.discount.replaceAll(",", ""));
+    voucher = discount;
+    calculate();
+  } else {
+    voucher = 0;
+    calculate();
+    showError(field_value, `Voucher không tìm thấy`);
+  }
 }
 
 $(document).ready(function () {
