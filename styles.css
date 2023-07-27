@@ -217,10 +217,12 @@ svg {
 .form-control input:focus::placeholder {
   color: transparent;
 }
+.form-control.success select,
 .form-control.success input {
   border-color: var(--success-color);
 }
 
+.form-control.error select,
 .form-control.error input {
   border-color: var(--error-color);
   background-image: url(./alert.png);
@@ -234,8 +236,8 @@ svg {
   color: var(--error-color);
   position: absolute;
   font-size: 10px;
-  right: 0;
-  bottom: 0;
+  left: 8px;
+  bottom: -14px;
   visibility: hidden;
 }
 
@@ -344,6 +346,7 @@ However, delay the fade out process for 2.5 seconds */
   }
 }
 
+.message-error,
 .message {
   position: absolute;
   top: -200px;
@@ -362,6 +365,8 @@ However, delay the fade out process for 2.5 seconds */
 }
 .qr {
 }
+
+.message-error .check-error,
 .message .check {
   position: absolute;
   top: 0;
@@ -369,7 +374,6 @@ However, delay the fade out process for 2.5 seconds */
   transform: translate(-50%, -50%) scale(4);
   width: 120px;
   height: 110px;
-  background: #71c341;
   color: white;
   font-size: 3.8rem;
   padding-top: 10px;
@@ -378,25 +382,40 @@ However, delay the fade out process for 2.5 seconds */
   transition: transform 0.2s 0.25s cubic-bezier(0.31, 0.25, 0.5, 1.5),
     opacity 0.1s 0.25s ease-in-out;
 }
+
+.message .check {
+  background: #71c341;
+}
+
+.message-error .check-error {
+  background: white;
+}
+
+.message-error .scaledown,
 .message .scaledown {
   transform: translate(-50%, -50%) scale(1);
   opacity: 1;
 }
+
+.message-error p,
 .message p {
   font-size: 1.1rem;
   margin: 25px 0px;
   padding: 0;
 }
+
+.message-error p:nth-child(2),
 .message p:nth-child(2) {
   font-size: 2.3rem;
   margin: 40px 0px 0px 0px;
 }
+
+.message-error #close,
 .message #ok {
   margin-top: 20px;
   position: relative;
   color: white;
   border: 0;
-  background: #71c341;
   width: 100%;
   height: 50px;
   border-radius: 6px;
@@ -404,6 +423,15 @@ However, delay the fade out process for 2.5 seconds */
   transition: background 0.2s ease;
   outline: none;
 }
+
+.message-error #close {
+  background: rgb(205, 39, 39);
+}
+
+.message #ok {
+  background: #71c341;
+}
+
 .message #ok:hover {
   background: #8ecf68;
 }
@@ -487,13 +515,16 @@ However, delay the fade out process for 2.5 seconds */
     font-size: 12px;
   }
 
+  .message-error,
   .message {
     width: 300px;
   }
 
+  .message-error p,
   .message p {
     font-size: 1.2rem;
   }
+  .message-error p:nth-child(2),
   .message p:nth-child(2) {
     font-size: 2rem;
     margin: 40px 0px 0px 0px;

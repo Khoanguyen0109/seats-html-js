@@ -66,9 +66,20 @@ async function onChangePlay(selectObject) {
   bookingSeats(value);
 }
 
-async function submitSeat() {
+async function submitSeat(body) {
   try {
-  } catch (error) {}
+    const res = await fetch(`${API_ENDPOINT}/`, {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    }).then((response) => response.json());
+    console.log("res", res);
+    return res;
+  } catch (error) {
+    return error;
+  }
 }
 function showError(input, message) {
   const formControl = input.parentElement;
@@ -198,11 +209,25 @@ function alert(text, type) {
   }, 3000);
 }
 // Event listeners
-form.addEventListener("submit", function (e) {
+form.addEventListener("submit", async function (e) {
   e.preventDefault();
-  const required = checkRequired(["name", "phone", "email", "play"]);
+  const inputFields = ["name", "phone", "email", "play"];
+  const required = checkRequired(inputFields);
+  const body = {};
+  inputFields.forEach((field) => {
+    body[field] = document.getElementById(field).value.trim();
+  });
   if (!required) {
-    go();
+    const res = await submitSeat({ seats: bookedSeat, ...body });
+    console.log("res", res);
+    if (res.data) {
+      return go();
+    }
+    if (res.booked) {
+      const message = document.getElementById("error-message");
+      message.innerHTML = `Ghế bạn đặt đã không còn: ${res.booked.toString()}`;
+    }
+    return goError();
   }
 });
 
@@ -325,9 +350,9 @@ function mouseup(e) {
 }
 
 function wheel(e) {
-  var scale = e.deltaY < 0 ? 0.9 : 1.08;
+  var scale = e.deltaY < 0 ? 0.9 : 1.2;
   console.log("scale", scale);
-  if (viewboxScale * scale < 1.5 && viewboxScale * scale > 1 / 100) {
+  if (viewboxScale * scale < 1.3 && viewboxScale * scale > 1 / 100) {
     var mpos = {
       x: mousePosition.x * viewboxScale,
       y: mousePosition.y * viewboxScale,
@@ -348,9 +373,19 @@ $("#ok").click(function () {
   location.reload();
 });
 
+$("#close").click(function () {
+  goError();
+  bookedSeat = [];
+});
+
 function go() {
   $(".message").toggleClass("comein");
   $(".check").toggleClass("scaledown");
+}
+
+function goError() {
+  $(".message-error").toggleClass("comein");
+  $(".check-error").toggleClass("scaledown");
 }
 
 $(document).ready(function () {
