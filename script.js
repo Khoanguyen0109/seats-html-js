@@ -3,11 +3,11 @@ const ACTIVE_SEAT = "black";
 const bookedSeat = [];
 let seats = [];
 let showTimes = [];
+let total = 0;
 const API_ENDPOINT = "https://heroku.goappscript.com/booking";
 async function getBookedSeats(id_xuat_chieu) {
   try {
     const res = await fetch(`${API_ENDPOINT}/booked-seats/${id_xuat_chieu}`);
-    console.log("res", res);
     bookedSeat.concat(res.data.data);
   } catch (error) {
     console.log("error", error);
@@ -16,8 +16,10 @@ async function getBookedSeats(id_xuat_chieu) {
 
 async function getSeats() {
   try {
-    const res = await fetch(`${API_ENDPOINT}/seats`).then((res) => res.json());
-    seats = res.data.data;
+    const res = await fetch(`${API_ENDPOINT}/seats`).then((response) =>
+      response.json()
+    );
+    seats = res.data;
   } catch (error) {
     console.log("error", error);
   }
@@ -155,6 +157,12 @@ const onFill = (seat) => {
     const box = gBox.childNodes[1];
     const color = ACTIVE_SEAT;
     box.setAttribute("fill", color);
+    const item = seats.find((item) => item.ma_ghe === seat);
+    console.log("item", item);
+    total += parseFloat(item.gia_ve.replaceAll(",", ""));
+    const totalBox = document.getElementById("total");
+    console.log("totalBox", totalBox);
+    totalBox.innerHTML = new Intl.NumberFormat().format(total);
   }
 };
 
@@ -179,6 +187,11 @@ const onUnFill = (seat) => {
   if (gBox) {
     const box = gBox.childNodes[1];
     box.setAttribute("fill", color);
+    const item = seats.find((item) => item.ma_ghe === seat);
+    total -= parseFloat(item.gia_ve.replaceAll(",", ""));
+    const totalBox = document.getElementById("total");
+    console.log("totalBox", totalBox);
+    totalBox.innerHTML = new Intl.NumberFormat().format(total);
   }
 };
 
@@ -218,7 +231,11 @@ form.addEventListener("submit", async function (e) {
     body[field] = document.getElementById(field).value.trim();
   });
   if (!required) {
-    const res = await submitSeat({ seats: bookedSeat, ...body });
+    const res = await submitSeat({
+      seats: bookedSeat,
+      tong_tien: total,
+      ...body,
+    });
     console.log("res", res);
     if (res.data) {
       return go();
