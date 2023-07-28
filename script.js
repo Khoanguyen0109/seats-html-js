@@ -1,5 +1,6 @@
 // Show input error message
 const ACTIVE_SEAT = "black";
+const DISABLE_SEAT = "grey";
 const bookedSeat = [];
 let seats = [];
 let showTimes = [];
@@ -72,7 +73,7 @@ async function bookingSeats(id_xuat_chieu) {
     ).then((res) => res.json());
     const bookedSeats = response.data;
     bookedSeats.forEach((id) => {
-      onFill(id);
+      onFillBooked(id);
     });
     console.log("first", response);
   } catch (error) {
@@ -197,6 +198,21 @@ const onFill = (seat) => {
   }
 };
 
+const onFillBooked = (seat) => {
+  const gBox = document.getElementById(seat);
+  if (gBox) {
+    const box = gBox.childNodes[1];
+    const color = DISABLE_SEAT;
+    console.log("color", color);
+    box.setAttribute("fill", color);
+    box.setAttribute("pointer-events", "none");
+    const item = seats.find((item) => item.ma_ghe === seat);
+    if (item) {
+      calculate();
+    }
+  }
+};
+
 const onUnFill = (seat) => {
   const rowMapColor = {};
   const floor = seat.split("_")[0];
@@ -306,12 +322,12 @@ function showBox(e) {
 }
 summerPalm.addEventListener("click", showBox);
 
-svgFrame.onload = function () {
-  // const bookedSeat = ["G02"];
-  bookedSeat.forEach((seat) => {
-    onFill(seat);
-  });
-};
+// svgFrame.onload = function () {
+//   // const bookedSeat = ["G02"];
+//   bookedSeat.forEach((seat) => {
+//     onFillBooked(seat);
+//   });
+// };
 
 shape = document.getElementsByTagName("svg")[0];
 //shape.setAttribute("viewBox", "-250 -250 500 750");
@@ -428,6 +444,12 @@ $("#close").click(function () {
 function go() {
   $(".message").toggleClass("comein");
   $(".check").toggleClass("scaledown");
+  const name = $("#name").val();
+  const email = $("#email").val();
+  const total = $("#total").text();
+
+  $("#payment-detail").text(` ${name} -  ${email}`);
+  $("#total-payment").text(`Số tiền: ${total}`);
 }
 
 function goError() {
