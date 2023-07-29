@@ -218,7 +218,7 @@ const onFillBooked = (seat) => {
     const color = DISABLE_SEAT;
     console.log("color", color);
     box.setAttribute("fill", color);
-    box.setAttribute("pointer-events", "none");
+    gBox.setAttribute("pointer-events", "none");
     const item = seats.find((item) => item.ma_ghe === seat);
     if (item) {
       calculate();
