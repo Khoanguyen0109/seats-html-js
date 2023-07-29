@@ -301,9 +301,12 @@ form.addEventListener("submit", async function (e) {
     }
     if (res.booked) {
       const message = document.getElementById("error-message");
+      const message2 = document.getElementById("sub-error-message");
+
       bookedSeat = [];
       res?.booked.forEach((item) => onFillBooked(item));
       message.innerHTML = `Ghế bạn đặt đã không còn: ${res.booked.toString()}`;
+      message2.innerHTML = "Vui lòng chọn lại ghế";
     }
     return goError();
   }
