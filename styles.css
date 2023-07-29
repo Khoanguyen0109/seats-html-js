@@ -444,7 +444,7 @@ However, delay the fade out process for 2.5 seconds */
 
 .comein {
   visibility: visible;
-  top: 250px;
+  top: 350px;
   opacity: 1;
 }
 
