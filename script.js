@@ -7,6 +7,15 @@ let showTimes = [];
 let total = 0;
 let voucher = 0;
 let bookedSeatLoaded = [];
+
+var body = document.getElementsByTagName("body")[0];
+function disableBodyScroll() {
+  body.style.overflowY = "hidden";
+}
+function enableBodyScroll() {
+  body.style.overflowY = "auto";
+}
+
 const API_ENDPOINT = "https://heroku.goappscript.com/booking";
 async function getBookedSeats(id_xuat_chieu) {
   try {
@@ -350,12 +359,14 @@ var viewboxScale = 1.0;
 var mouseDown = false;
 
 shape.onmouseover = () => {
+  disableBodyScroll();
   shape.addEventListener("mousemove", mousemove);
   shape.addEventListener("mousedown", mousedown);
   shape.addEventListener("wheel", wheel);
 };
 
 shape.onmouseout = () => {
+  enableBodyScroll();
   shape.removeEventListener("mousemove", mousemove);
   shape.removeEventListener("mousedown", mousedown);
   shape.removeEventListener("wheel", wheel);
