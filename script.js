@@ -6,7 +6,7 @@ let seats = [];
 let showTimes = [];
 let total = 0;
 let voucher = 0;
-
+let bookedSeatLoaded = [];
 const API_ENDPOINT = "https://heroku.goappscript.com/booking";
 async function getBookedSeats(id_xuat_chieu) {
   try {
@@ -71,10 +71,14 @@ async function bookingSeats(id_xuat_chieu) {
     const response = await fetch(
       `${API_ENDPOINT}/booked-seats/${id_xuat_chieu}`
     ).then((res) => res.json());
-    const bookedSeats = response.data;
-    bookedSeats.forEach((id) => {
+    bookedSeatLoaded.forEach((id) => onUnFill(id));
+    bookedSeatLoaded = response.data;
+    if (bookedSeatLoaded.length > 0) {
+    }
+    bookedSeatLoaded.forEach((id) => {
       onFillBooked(id);
     });
+
     console.log("first", response);
   } catch (error) {
     console.log("error", error);
