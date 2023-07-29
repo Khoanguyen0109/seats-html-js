@@ -288,6 +288,7 @@ form.addEventListener("submit", async function (e) {
     }
     if (res.booked) {
       const message = document.getElementById("error-message");
+      res?.booked.forEach((item) => onFillBooked(item));
       message.innerHTML = `Ghế bạn đặt đã không còn: ${res.booked.toString()}`;
     }
     return goError();
