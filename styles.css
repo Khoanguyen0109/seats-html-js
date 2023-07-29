@@ -155,7 +155,7 @@ svg {
 
 .grid-container {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto;
   gap: 8px 22px;
 }
 .grid-item {
