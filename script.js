@@ -1,7 +1,7 @@
 // Show input error message
 const ACTIVE_SEAT = "black";
 const DISABLE_SEAT = "grey";
-const bookedSeat = [];
+let bookedSeat = [];
 let seats = [];
 let showTimes = [];
 let total = 0;
@@ -199,6 +199,7 @@ function calculate() {
 }
 
 const onFill = (seat) => {
+  console.log("seat", seat);
   const gBox = document.getElementById(seat);
   if (gBox) {
     const box = gBox.childNodes[1];
@@ -295,12 +296,12 @@ form.addEventListener("submit", async function (e) {
       tong_tien: total,
       ...body,
     });
-    console.log("res", res);
     if (res.data) {
       return go();
     }
     if (res.booked) {
       const message = document.getElementById("error-message");
+      bookedSeat = [];
       res?.booked.forEach((item) => onFillBooked(item));
       message.innerHTML = `Ghế bạn đặt đã không còn: ${res.booked.toString()}`;
     }
@@ -316,7 +317,8 @@ function showBox(e) {
   if (
     seatId !== "Stage" &&
     !seatId.includes("Group") &&
-    !seatId.includes("frame")
+    !seatId.includes("frame") &&
+    !seatId.includes("Frame")
   ) {
     if (bookedSeat.includes(seatId)) {
       const index = bookedSeat.indexOf(seatId);

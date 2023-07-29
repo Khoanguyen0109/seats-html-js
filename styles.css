@@ -348,6 +348,7 @@ However, delay the fade out process for 2.5 seconds */
 
 .message-error,
 .message {
+  visibility: hidden;
   position: absolute;
   top: -200px;
   left: 50%;
@@ -440,6 +441,7 @@ However, delay the fade out process for 2.5 seconds */
 }
 
 .comein {
+  visibility: visible;
   top: 150px;
   opacity: 1;
 }
