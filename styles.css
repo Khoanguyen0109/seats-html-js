@@ -17,7 +17,7 @@ body {
   overflow: auto;
   width: 100vw;
   height: 100vh;
-  padding-top: 100px;
+  /* padding-top: 100px; */
 }
 
 .top-row {
@@ -30,8 +30,8 @@ body {
 .svg-label {
   margin-bottom: 0;
   margin-top: 10px;
-  font-size: 24px;
-  font-weight: 500;
+  font-size: 23px;
+  font-weight: 600;
 }
 
 .sub-svg-label {
@@ -54,9 +54,7 @@ body {
 }
 
 .title-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
 }
 
 .title {
@@ -155,10 +153,14 @@ svg {
 
 .grid-container {
   display: grid;
-  grid-template-columns: auto;
+  grid-template-columns: auto auto;
   gap: 8px 22px;
 }
 .grid-item {
+}
+
+.grid-item-full {
+  grid-column: 1 / -1;
 }
 
 .separator {
