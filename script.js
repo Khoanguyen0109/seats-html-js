@@ -462,20 +462,31 @@ $("#close").click(function () {
   bookedSeat = [];
 });
 
+function onAbleClick() {
+  let svg = document.getElementById("frame");
+  const pointEvent = svg.getAttribute("pointer-events");
+  if (pointEvent !== "none") {
+    svg.setAttribute("pointer-events", "none");
+  } else {
+    svg.setAttribute("pointer-events", "initial");
+  }
+}
+
 function go() {
   $(".message").toggleClass("comein");
   $(".check").toggleClass("scaledown");
   const name = $("#name").val();
   const email = $("#email").val();
   const total = $("#total").text();
-
-  $("#payment-detail").text(` ${name} -  ${email}`);
+  onAbleClick();
+  $("#payment-detail").text(` ${name} -  ${phone}`);
   $("#total-payment").text(`Số tiền: ${total}`);
 }
 
 function goError() {
   $(".message-error").toggleClass("comein");
   $(".check-error").toggleClass("scaledown");
+  onAbleClick();
 }
 
 async function onFindVoucher(selectObject) {

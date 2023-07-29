@@ -444,7 +444,7 @@ However, delay the fade out process for 2.5 seconds */
 
 .comein {
   visibility: visible;
-  top: 350px;
+  top: 150px;
   opacity: 1;
 }
 
@@ -536,6 +536,6 @@ However, delay the fade out process for 2.5 seconds */
   }
 
   .comein {
-    top: 300px;
+    top: 400px;
   }
 }
