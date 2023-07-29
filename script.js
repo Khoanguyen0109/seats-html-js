@@ -339,7 +339,7 @@ var mouseStartPosition = { x: 0, y: 0 };
 var mousePosition = { x: 0, y: 0 };
 var viewboxStartPosition = { x: 0, y: 0 };
 var viewboxPosition = { x: 0, y: 0 };
-var viewboxSize = { x: 777, y: 944 };
+var viewboxSize = { x: 777, y: 836 };
 var viewboxScale = 1.0;
 
 var mouseDown = false;
