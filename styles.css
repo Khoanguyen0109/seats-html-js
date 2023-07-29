@@ -444,7 +444,7 @@ However, delay the fade out process for 2.5 seconds */
 
 .comein {
   visibility: visible;
-  top: 150px;
+  top: 250px;
   opacity: 1;
 }
 
@@ -533,5 +533,9 @@ However, delay the fade out process for 2.5 seconds */
   .message p:nth-child(2) {
     font-size: 2rem;
     margin: 40px 0px 0px 0px;
+  }
+
+  .comein {
+    top: 300px;
   }
 }
