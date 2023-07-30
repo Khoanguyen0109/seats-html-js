@@ -483,10 +483,10 @@ function go() {
   $(".message").toggleClass("comein");
   $(".check").toggleClass("scaledown");
   const name = $("#name").val();
-  const email = $("#email").val();
+  const phoneValue = $("#phone").val();
   const total = $("#total").text();
   onAbleClick();
-  $("#payment-detail").text(` ${name} -  ${phone}`);
+  $("#payment-detail").text(` ${name} -  ${phoneValue}`);
   $("#total-payment").text(`Số tiền: ${total}`);
 }
 
