@@ -486,7 +486,7 @@ function go() {
   const phoneValue = $("#phone").val();
   const total = $("#total").text();
   onAbleClick();
-  $("#payment-detail").text(` ${name} -  ${phoneValue}`);
+  $("#payment-detail").val(` ${name} -  ${phoneValue}`);
   $("#total-payment").text(`Số tiền: ${total}`);
 }
 
@@ -531,4 +531,17 @@ $(document).ready(function () {
   // put Ajax here.
   getSeats();
   getShowTimes();
+});
+
+
+let copyText = document.querySelector(".copy-text");
+copyText.querySelector("button").addEventListener("click", function () {
+	let input = document.getElementById('payment-detail')
+  input.select();
+	document.execCommand("copy");
+	copyText.classList.add("active");
+	window.getSelection().removeAllRanges();
+	setTimeout(function () {
+		copyText.classList.remove("active");
+	}, 2500);
 });

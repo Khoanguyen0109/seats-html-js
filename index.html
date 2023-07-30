@@ -18,6 +18,10 @@
       href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
     <link rel="stylesheet" href="./styles.css" />
@@ -18186,7 +18190,11 @@
         <img width="50%" height="50%" src="./qr.png" />
         <p id="total-payment"></p>
         <p>Nội dung chuyển khoản:</p>
-        <p id="payment-detail"></p>
+
+        <div class="copy-text">
+          <input type="text" class="text" id="payment-detail"/>
+          <button><i class="fa fa-clone"></i></button>
+        </div>
         <button id="ok">Thanh toán</button>
       </div>
 
