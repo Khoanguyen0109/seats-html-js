@@ -447,6 +447,12 @@ However, delay the fade out process for 2.5 seconds */
   top: 150px;
   opacity: 1;
 }
+#submit:disabled,
+#submit[disabled] {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
 
 @media screen and (max-width: 700px) {
   body {

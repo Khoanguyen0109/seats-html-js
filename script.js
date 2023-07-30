@@ -284,6 +284,8 @@ function alert(text, type) {
 // Event listeners
 form.addEventListener("submit", async function (e) {
   e.preventDefault();
+  const button = document.getElementById('submit')
+
   const inputFields = ["name", "phone", "email", "play"];
   const required = checkRequired(inputFields);
   const body = {};
@@ -291,11 +293,16 @@ form.addEventListener("submit", async function (e) {
     body[field] = document.getElementById(field).value.trim();
   });
   if (!required) {
+    button.setAttribute('disabled', '');
+    button.innerText ="Đang xử lý... "
     const res = await submitSeat({
       seats: bookedSeat,
       tong_tien: total,
       ...body,
     });
+    button.removeAttribute('disabled')
+    button.innerText ="Đăng ký"
+
     if (res.data) {
       return go();
     }
