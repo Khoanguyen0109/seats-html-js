@@ -325,7 +325,7 @@ form.addEventListener("submit", async function (e) {
   });
   if (!required) {
     button.setAttribute("disabled", "");
-    button.innerText = "Đang xử lý... ";
+    button.innerText = "Đang xử lý ... ";
     const res = await submitSeat({
       seats: bookedSeat,
       tong_tien: total,
@@ -507,10 +507,36 @@ d3.svg(url).then((xml) => {
   let minimapRect = minimap.append("rect").attr("id", "minimapRect");
 
   let transform = d3.zoomIdentity.translate(-375, -500).scale(2);
-  let zoom = d3.zoom().scaleExtent([1, 3]).on("zoom", zoomed);
+  let zoom = d3.zoom().scaleExtent([1, 2]).on("zoom", zoomed);
 
   map.call(zoom).call(zoom.transform, transform);
 
+  var drag1 = d3.behavior
+    .drag()
+    .origin(function () {
+      var t = d3.select(this);
+      return {
+        x: t.attr("x") + d3.transform(t.attr("transform")).translate[0],
+        y: t.attr("y") + d3.transform(t.attr("transform")).translate[1],
+      };
+    })
+    .on("drag", function (d, i) {
+      var left = d3.event.x;
+      if (left + groupWidth + strokeWidth > svgWidth) {
+        left = svgWidth - groupWidth - strokeWidth;
+      } else if (d3.event.x < 0) {
+        left = 0;
+      }
+      var top = d3.event.y;
+      if (top + groupHeight + strokeWidth > svgHeight) {
+        top = svgHeight - groupHeight - strokeWidth;
+      } else if (d3.event.y < 0) {
+        top = 0;
+      }
+      d3.select(this).attr("transform", function (d, i) {
+        return "translate(" + [left, top] + ")";
+      });
+    });
   function zoomed() {
     let transform = d3.event.transform;
     let modifiedTransform = d3.zoomIdentity
