@@ -622,22 +622,25 @@ However, delay the fade out process for 2.5 seconds */
     width: 300px;
   }
 
-  .message-error p,
-  .message p {
-    font-size: 1.2rem;
-  }
-  .message-error p:nth-child(2),
-  .message p:nth-child(2) {
-    font-size: 2rem;
-    margin: 40px 0px 0px 0px;
+
+  .side-message:nth-child(2){
+    margin-top: 0;
   }
 
   .comein {
-    top: 400px;
+    top: 70px;
   }
 
   .copy-text button {
     padding: 8px;
+  }
+
+  .message-container {
+    flex-direction: column;
+  }
+  .message p{
+    margin: 0;
+    margin-top: 10px;
   }
 }
 
