@@ -159,16 +159,36 @@
       <div class="fullscreen-container">
         <div class="message">
           <div class="check">&#10004;</div>
-          <p>Mã thanh toán</p>
-          <p>Vui lòng quét mã QR để thanh toán</p>
-          <img width="50%" height="50%" src="./qr.png" />
-          <p id="total-payment"></p>
-          <p>Nội dung chuyển khoản:</p>
+          <div class="message-container">
+            <div class="side-message">
+              <img id="qr-code" width="50%" height="50%" src="./qr.png" />
+              <p id="total-payment"></p>
+              <p>Nội dung chuyển khoản:</p>
+              <div class="copy-text">
+                <input type="text" class="text" id="payment-detail" />
+                <button><i class="fa fa-clone"></i></button>
+              </div>s
+            </div>
+            <div class="side-message">
+              <div class="info">
+                <p id="name-payment"></p>
+                <p id="phone-payment"></p>
+                <p id="email-payment"></p>
+              </div>
 
-          <div class="copy-text">
-            <input type="text" class="text" id="payment-detail" />
-            <button><i class="fa fa-clone"></i></button>
+              <table class="item-table">
+                <thead>
+                  <tr>
+                    <th><strong>Vị Trí Ghế</strong></th>
+                    <th><strong>Giá</strong></th>
+                  </tr>
+                </thead>
+                <tbody id="seat-summary"></tbody>
+              </table>
+              <hr />
+            </div>
           </div>
+
           <button id="ok">Thanh toán</button>
         </div>
       </div>

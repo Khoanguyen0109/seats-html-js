@@ -372,7 +372,7 @@ However, delay the fade out process for 2.5 seconds */
   top: -200px;
   left: 50%;
   transform: translate(-50%, 0%);
-  width: 500px;
+  width: 700px;
   background: white;
   border-radius: 8px;
   padding: 30px;
@@ -383,7 +383,20 @@ However, delay the fade out process for 2.5 seconds */
   transition: top 0.3s cubic-bezier(0.31, 0.25, 0.5, 1.5),
     opacity 0.2s ease-in-out;
 }
-.qr {
+.message-container {
+  display: flex;
+  gap: 12px;
+  flex-direction: row;
+}
+
+.message-container .side-message {
+  flex: 1;
+  margin-top: 40px;
+}
+
+.message-container .side-message .info {
+  font-size: 14px;
+  text-align: left;
 }
 
 .message-error .check-error,
@@ -422,12 +435,6 @@ However, delay the fade out process for 2.5 seconds */
   font-size: 1.1rem;
   margin: 25px 0px;
   padding: 0;
-}
-
-.message-error p:nth-child(2),
-.message p:nth-child(2) {
-  font-size: 2.3rem;
-  margin: 40px 0px 0px 0px;
 }
 
 .message-error #close,

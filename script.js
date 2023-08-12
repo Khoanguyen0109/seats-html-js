@@ -7,6 +7,9 @@ let showTimes = [];
 let total = 0;
 let voucher = 0;
 let bookedSeatLoaded = [];
+let bank = "";
+let stk = "";
+let account = "";
 
 var body = document.getElementsByTagName("body")[0];
 function disableBodyScroll() {
@@ -39,10 +42,13 @@ async function getSeats() {
 
 async function getBanner() {
   try {
-    const res = await fetch(`${API_ENDPOINT}/banner`).then((response) =>
+    const res = await fetch(`${API_ENDPOINT}/info`).then((response) =>
       response.json()
     );
-    const bannerSrc = res.banner;
+    const bannerSrc = res.data.banner;
+    bank = res.data.bank;
+    stk = res.data.stk;
+    account = res.data.account;
     $("#banner").attr("src", bannerSrc);
   } catch (error) {
     console.log("error", error);
@@ -307,6 +313,8 @@ function alert(text, type) {
 // Event listeners
 form.addEventListener("submit", async function (e) {
   e.preventDefault();
+  // return go();
+
   const button = document.getElementById("submit");
 
   const inputFields = ["name", "phone", "email", "play"];
@@ -379,12 +387,32 @@ function go() {
   $(".fullscreen-container").fadeTo(200, 1);
   $(".message").toggleClass("comein");
   $(".check").toggleClass("scaledown");
+  let carttable = "";
+  bookedSeat.forEach((seat) => {
+    const nameSeat = seat.replaceAll("_", "-");
+    const item = seats.find((item) => item.ma_ghe === seat);
+    const price = parseFloat(item.gia_ve.replaceAll(",", ""));
+    carttable += "<tr><td>" + nameSeat + "</td><td>" + price + "</td></tr>";
+  });
+
+  document.getElementById("seat-summary").innerHTML = carttable;
+
   const name = $("#name").val();
-  console.log("name", name);
   const phoneValue = $("#phone").val();
-  const total = $("#total").text();
-  $("#payment-detail").val(` ${name} -  ${phoneValue}`);
-  $("#total-payment").text(`Số tiền: ${total}`);
+  const email = $("#email").val();
+
+  const total = parseFloat($("#total").text().replaceAll(",", ""));
+  console.log("total", total);
+  $("#name-payment").text(` Tên người đăng kí: ${name}`);
+  $("#phone-payment").text(` Số điện thoại: ${phoneValue}`);
+  $("#email-payment").text(` Email: ${email}`);
+
+  const paymentDetail = `${name} -  ${phoneValue}`;
+  $("#payment-detail").val(paymentDetail);
+  const qrSource = `https://img.vietqr.io/image/${bank}-${stk}-compact2.jpg?amount=${total}&addInfo=${paymentDetail}&accountName=${account}`;
+  $("#qr-code").attr("src", qrSource);
+
+  $("#total-payment").text(`Số tiền: ${new Intl.NumberFormat().format(total)}`);
 }
 
 function goError() {
@@ -407,9 +435,9 @@ async function onFindVoucher(selectObject) {
     const res = await getVoucher({ voucher: value });
     if (res.status === 200 && res.discount) {
       const discount = parseFloat(res.discount.replaceAll(",", ""));
-       const small = formControl.querySelector("small");
+      const small = formControl.querySelector("small");
       small.innerText = "";
-      showSuccess(field_value)
+      showSuccess(field_value);
       voucher = discount;
       document.getElementById("discount").innerHTML = discount;
 
