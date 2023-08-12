@@ -37,6 +37,18 @@ async function getSeats() {
   }
 }
 
+async function getBanner() {
+  try {
+    const res = await fetch(`${API_ENDPOINT}/banner`).then((response) =>
+      response.json()
+    );
+    const bannerSrc = res.banner;
+    $("#banner").attr("src", bannerSrc);
+  } catch (error) {
+    console.log("error", error);
+  }
+}
+
 async function getVoucher(body) {
   try {
     const res = await fetch(`${API_ENDPOINT}/check-voucher`, {
@@ -359,26 +371,18 @@ $("#ok").click(function () {
 
 $("#close").click(function () {
   goError();
+  $(".fullscreen-container").fadeOut(200);
   bookedSeat = [];
 });
 
-function onAbleClick() {
-  let svg = document.getElementById("frame");
-  const pointEvent = svg.getAttribute("pointer-events");
-  if (pointEvent !== "none") {
-    svg.setAttribute("pointer-events", "none");
-  } else {
-    svg.setAttribute("pointer-events", "initial");
-  }
-}
-
 function go() {
+  $(".fullscreen-container").fadeTo(200, 1);
   $(".message").toggleClass("comein");
   $(".check").toggleClass("scaledown");
   const name = $("#name").val();
+  console.log("name", name);
   const phoneValue = $("#phone").val();
   const total = $("#total").text();
-  onAbleClick();
   $("#payment-detail").val(` ${name} -  ${phoneValue}`);
   $("#total-payment").text(`Số tiền: ${total}`);
 }
@@ -386,31 +390,36 @@ function go() {
 function goError() {
   $(".message-error").toggleClass("comein");
   $(".check-error").toggleClass("scaledown");
-  onAbleClick();
 }
 
 async function onFindVoucher(selectObject) {
   var value = selectObject;
   let field_value = document.getElementById("voucher");
+  const formControl = field_value.parentElement;
 
-  const res = await getVoucher({ voucher: value });
   if (value === "") {
-    const formControl = field_value.parentElement;
     formControl.className = "form-control";
     const small = formControl.querySelector("small");
     small.innerText = "";
+    document.getElementById("discount").innerHTML = 0;
     return;
-  }
-  if (res.status === 200 && res.discount) {
-    const discount = parseFloat(res.discount.replaceAll(",", ""));
-    voucher = discount;
-    document.getElementById("discount").innerHTML = discount;
-
-    calculate();
   } else {
-    voucher = 0;
-    calculate();
-    showError(field_value, `Voucher không tìm thấy`);
+    const res = await getVoucher({ voucher: value });
+    if (res.status === 200 && res.discount) {
+      const discount = parseFloat(res.discount.replaceAll(",", ""));
+       const small = formControl.querySelector("small");
+      small.innerText = "";
+      showSuccess(field_value)
+      voucher = discount;
+      document.getElementById("discount").innerHTML = discount;
+
+      calculate();
+    } else {
+      voucher = 0;
+      calculate();
+      document.getElementById("discount").innerHTML = 0;
+      showError(field_value, `Voucher không tìm thấy`);
+    }
   }
 }
 
@@ -424,6 +433,7 @@ $(document).ready(function () {
   }
   // put Ajax here.
   getSeats();
+  getBanner();
   getShowTimes();
 });
 

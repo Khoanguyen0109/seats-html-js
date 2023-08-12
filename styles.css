@@ -17,7 +17,20 @@ body {
   overflow: auto;
   width: 100vw;
   height: 100vh;
+  margin: 0;
+  padding: 0;
   /* padding-top: 100px; */
+}
+
+.hero-image {
+  height: 400px;
+  position: relative;
+}
+
+#banner {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
 }
 
 .top-row {
@@ -519,8 +532,8 @@ However, delay the fade out process for 2.5 seconds */
 }
 
 @media screen and (max-width: 700px) {
-  body {
-    padding-top: 20px;
+  .hero-image {
+    height: 200px;
   }
   .row {
     flex-direction: column;
@@ -689,4 +702,15 @@ table th {
 
 table td:nth-last-child(1) {
   text-align: right;
+}
+
+.fullscreen-container {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(90, 90, 90, 0.5);
+  z-index: 9999;
 }
