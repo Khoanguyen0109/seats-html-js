@@ -183,23 +183,35 @@ function getFieldName(input) {
 }
 
 function calculate() {
+  let subtotal = 0;
   total = 0;
+  var carttable = "";
+
   bookedSeat.forEach((seat) => {
+    const nameSeat = seat.replaceAll("_", "-");
     const item = seats.find((item) => item.ma_ghe === seat);
-    total += parseFloat(item.gia_ve.replaceAll(",", ""));
+    const price = parseFloat(item.gia_ve.replaceAll(",", ""));
+    carttable += "<tr><td>" + nameSeat + "</td><td>" + price + "</td></tr>";
+    total += price;
+    subtotal = total;
   });
+
   const preTotal = total - voucher;
   if (preTotal >= 0) {
     total = preTotal;
   } else {
     total = 0;
   }
-  const totalBox = document.getElementById("total");
-  totalBox.innerHTML = new Intl.NumberFormat().format(total);
+  document.getElementById("subtotal").innerHTML =
+    new Intl.NumberFormat().format(subtotal);
+
+  document.getElementById("carttable").innerHTML = carttable;
+  document.getElementById("total").innerHTML = new Intl.NumberFormat().format(
+    total
+  );
 }
 
 const onFill = (seat) => {
-  console.log("seat", seat);
   const gBox = document.getElementById(seat);
   if (gBox) {
     const box = gBox.childNodes[1];
@@ -217,7 +229,6 @@ const onFillBooked = (seat) => {
   if (gBox) {
     const box = gBox.childNodes[1];
     const color = DISABLE_SEAT;
-    console.log("color", color);
     box.setAttribute("fill", color);
     gBox.setAttribute("pointer-events", "none");
     const item = seats.find((item) => item.ma_ghe === seat);
@@ -284,7 +295,7 @@ function alert(text, type) {
 // Event listeners
 form.addEventListener("submit", async function (e) {
   e.preventDefault();
-  const button = document.getElementById('submit')
+  const button = document.getElementById("submit");
 
   const inputFields = ["name", "phone", "email", "play"];
   const required = checkRequired(inputFields);
@@ -293,15 +304,15 @@ form.addEventListener("submit", async function (e) {
     body[field] = document.getElementById(field).value.trim();
   });
   if (!required) {
-    button.setAttribute('disabled', '');
-    button.innerText ="Đang xử lý... "
+    button.setAttribute("disabled", "");
+    button.innerText = "Đang xử lý... ";
     const res = await submitSeat({
       seats: bookedSeat,
       tong_tien: total,
       ...body,
     });
-    button.removeAttribute('disabled')
-    button.innerText ="Đăng ký"
+    button.removeAttribute("disabled");
+    button.innerText = "Đăng ký";
 
     if (res.data) {
       return go();
@@ -319,13 +330,10 @@ form.addEventListener("submit", async function (e) {
   }
 });
 
-const svgFrame = document.getElementById("frame");
-const summerPalm = document.querySelector("g");
-
 function showBox(e) {
   let seatId = e.target.parentElement.getAttribute("id");
   if (
-    seatId !== "Stage" &&
+    seatId !== "main_container" &&
     !seatId.includes("Group") &&
     !seatId.includes("frame") &&
     !seatId.includes("Frame")
@@ -341,121 +349,6 @@ function showBox(e) {
       bookedSeat.push(seatId);
       onFill(seatId);
     }
-  }
-  const seatBox = document.getElementById("seats");
-  const textSeatBox = bookedSeat.join(", ");
-  seatBox.innerHTML = "<p>" + textSeatBox + "</p>";
-}
-summerPalm.addEventListener("click", showBox);
-
-// svgFrame.onload = function () {
-//   // const bookedSeat = ["G02"];
-//   bookedSeat.forEach((seat) => {
-//     onFillBooked(seat);
-//   });
-// };
-
-shape = document.getElementsByTagName("svg")[0];
-//shape.setAttribute("viewBox", "-250 -250 500 750");
-
-//shape = document.getElementsByTagName("h1")[0];
-//shape.innerHTML = "testing jscript";
-
-var mouseStartPosition = { x: 0, y: 0 };
-var mousePosition = { x: 0, y: 0 };
-var viewboxStartPosition = { x: 0, y: 0 };
-var viewboxPosition = { x: 0, y: 0 };
-var viewboxSize = { x: 777, y: 911 };
-var viewboxScale = 1.0;
-
-var mouseDown = false;
-
-shape.onmouseover = () => {
-  disableBodyScroll();
-  shape.addEventListener("mousemove", mousemove);
-  shape.addEventListener("mousedown", mousedown);
-  shape.addEventListener("wheel", wheel);
-};
-
-shape.onmouseout = () => {
-  enableBodyScroll();
-  shape.removeEventListener("mousemove", mousemove);
-  shape.removeEventListener("mousedown", mousedown);
-  shape.removeEventListener("wheel", wheel);
-};
-
-function mousedown(e) {
-  mouseStartPosition.x = e.pageX;
-  mouseStartPosition.y = e.pageY;
-
-  viewboxStartPosition.x = viewboxPosition.x;
-  viewboxStartPosition.y = viewboxPosition.y;
-
-  window.addEventListener("mouseup", mouseup);
-
-  mouseDown = true;
-}
-
-function setviewbox() {
-  var vp = { x: 0, y: 0 };
-  var vs = { x: 0, y: 0 };
-
-  vp.x = viewboxPosition.x;
-  vp.y = viewboxPosition.y;
-
-  vs.x = viewboxSize.x * viewboxScale;
-  vs.y = viewboxSize.y * viewboxScale;
-
-  shape = document.getElementsByTagName("svg")[0];
-  shape.setAttribute("viewBox", vp.x + " " + vp.y + " " + vs.x + " " + vs.y);
-}
-
-function mousemove(e) {
-  mousePosition.x = e.offsetX;
-  mousePosition.y = e.offsetY;
-
-  if (mouseDown) {
-    viewboxPosition.x =
-      viewboxStartPosition.x + (mouseStartPosition.x - e.pageX) * viewboxScale;
-    viewboxPosition.y =
-      viewboxStartPosition.y + (mouseStartPosition.y - e.pageY) * viewboxScale;
-
-    setviewbox();
-  }
-
-  var mpos = {
-    x: mousePosition.x * viewboxScale,
-    y: mousePosition.y * viewboxScale,
-  };
-  var vpos = { x: viewboxPosition.x, y: viewboxPosition.y };
-  var cpos = { x: mpos.x + vpos.x, y: mpos.y + vpos.y };
-
-  shape = document.getElementsByTagName("h1")[0];
-  shape.innerHTML = mpos.x + " " + mpos.y + " " + cpos.x + " " + cpos.y;
-}
-
-function mouseup(e) {
-  window.removeEventListener("mouseup", mouseup);
-
-  mouseDown = false;
-}
-
-function wheel(e) {
-  var scale = e.deltaY < 0 ? 0.9 : 1.2;
-  console.log("scale", scale);
-  if (viewboxScale * scale < 1.3 && viewboxScale * scale > 1 / 100) {
-    var mpos = {
-      x: mousePosition.x * viewboxScale,
-      y: mousePosition.y * viewboxScale,
-    };
-    var vpos = { x: viewboxPosition.x, y: viewboxPosition.y };
-    var cpos = { x: mpos.x + vpos.x, y: mpos.y + vpos.y };
-
-    viewboxPosition.x = (viewboxPosition.x - cpos.x) * scale + cpos.x;
-    viewboxPosition.y = (viewboxPosition.y - cpos.y) * scale + cpos.y;
-    viewboxScale *= scale;
-
-    setviewbox();
   }
 }
 
@@ -511,6 +404,8 @@ async function onFindVoucher(selectObject) {
   if (res.status === 200 && res.discount) {
     const discount = parseFloat(res.discount.replaceAll(",", ""));
     voucher = discount;
+    document.getElementById("discount").innerHTML = discount;
+
     calculate();
   } else {
     voucher = 0;
@@ -521,7 +416,6 @@ async function onFindVoucher(selectObject) {
 
 $(document).ready(function () {
   var w = window.innerWidth;
-  console.log("w", w);
   var h = window.innerHeight;
   if (w < 700) {
     const map = document.getElementById("map");
@@ -533,15 +427,71 @@ $(document).ready(function () {
   getShowTimes();
 });
 
-
 let copyText = document.querySelector(".copy-text");
 copyText.querySelector("button").addEventListener("click", function () {
-	let input = document.getElementById('payment-detail')
+  let input = document.getElementById("payment-detail");
   input.select();
-	document.execCommand("copy");
-	copyText.classList.add("active");
-	window.getSelection().removeAllRanges();
-	setTimeout(function () {
-		copyText.classList.remove("active");
-	}, 2500);
+  document.execCommand("copy");
+  copyText.classList.add("active");
+  window.getSelection().removeAllRanges();
+  setTimeout(function () {
+    copyText.classList.remove("active");
+  }, 2500);
 });
+
+let url = "./seats.svg";
+d3.svg(url).then((xml) => {
+  let width = parseInt(d3.select("body").style("width"));
+  let height = parseInt(d3.select("body").style("height"));
+
+  document
+    .querySelector("#map")
+    .appendChild(xml.documentElement.cloneNode(true));
+  document
+    .querySelector("#minimap")
+    .appendChild(xml.documentElement.cloneNode(true));
+
+  let minimapsize = 200;
+
+  var w = window.innerWidth;
+  if (w < 700) {
+    minimapsize = 140;
+  }
+  const summerPalm = document.querySelector("g");
+  summerPalm.addEventListener("click", showBox);
+  let map = d3.select("#map").select("svg");
+  let minimap = d3
+    .select("#minimap")
+    .select("svg")
+    .attr("width", minimapsize)
+    .attr("height", minimapsize);
+
+  let minimapRect = minimap.append("rect").attr("id", "minimapRect");
+
+  let transform = d3.zoomIdentity.translate(-375, -500).scale(2);
+  let zoom = d3.zoom().scaleExtent([1, 3]).on("zoom", zoomed);
+
+  map.call(zoom).call(zoom.transform, transform);
+
+  function zoomed() {
+    let transform = d3.event.transform;
+    let modifiedTransform = d3.zoomIdentity
+      .scale(1 / transform.k)
+      .translate(-transform.x, -transform.y);
+
+    let mapMainContainer = map
+      .select("#main_container")
+      .attr("transform", transform);
+
+    minimapRect
+      .attr("width", mapMainContainer.node().getBBox().width)
+      .attr("height", mapMainContainer.node().getBBox().height)
+      .attr("stroke", "red")
+      .attr("stroke-width", 10 / modifiedTransform.k)
+      .attr("stroke-dasharray", 10 / modifiedTransform.k)
+      .attr("fill", "none")
+      .attr("transform", modifiedTransform);
+  }
+});
+
+/* Calculate Cart Total */
